@@ -12,3 +12,13 @@ Class {
 OLObjVLisp class >> classMetaclass [
 	^ OLClass
 ]
+
+{ #category : #'hooks-api' }
+OLObjVLisp class >> indexedSlotMetaclass [
+	^ EP2MIndexedSlot
+]
+
+{ #category : #'hooks-api' }
+OLObjVLisp class >> instanceVariableSlotMetaclass [
+	^ EP2MInstanceVariableSlot 
+]
