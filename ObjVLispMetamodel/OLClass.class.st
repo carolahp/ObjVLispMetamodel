@@ -8,3 +8,8 @@ Class {
 	#superclass : #EP2MClass,
 	#category : #ObjVLispMetamodel
 }
+
+{ #category : #'accessing-backend' }
+OLClass >> classSide [
+	^ self parent classMetaclass
+]

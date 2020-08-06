@@ -37,7 +37,9 @@ OLObjVLisp >> hookCreateMetaclassStubWithClassLoader: aClassLoader [
 		createStubForClassNamed: model name
 		metaclassIndex: metaclassIndex
 		newClassIndex: metaclassIndex.
-	loader registerClass: theNewMetaclass named: model name.
+		
+	loader registerClass: theNewMetaclass definition: model fullyLoaded: false.
+
 
 	self assert: theNewMetaclass basicClass = theNewMetaclass.
 	^ theNewMetaclass
