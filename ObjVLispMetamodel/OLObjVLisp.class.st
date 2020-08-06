@@ -22,3 +22,23 @@ OLObjVLisp class >> indexedSlotMetaclass [
 OLObjVLisp class >> instanceVariableSlotMetaclass [
 	^ EP2MInstanceVariableSlot 
 ]
+
+{ #category : #hooks }
+OLObjVLisp >> hookCreateMetaclassStubWithClassLoader: aClassLoader [ 
+	| model loader metaclassIndex classIndex theNewMetaclass theNewMetaclassClass |
+	" We need to create the metaclass and its respective metaclass (the metaclass class) "
+	loader := aClassLoader.
+	model := self classMetaclass.
+	
+	metaclassIndex := aClassLoader newClassIndex.
+	
+	"This is Metaclass"
+	theNewMetaclass := loader
+		createStubForClassNamed: model name
+		metaclassIndex: metaclassIndex
+		newClassIndex: metaclassIndex.
+	loader registerClass: theNewMetaclass named: model name.
+
+	self assert: theNewMetaclass basicClass = theNewMetaclass.
+	^ theNewMetaclass
+]
