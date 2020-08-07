@@ -39,6 +39,15 @@ OLClass >> instVarNames: aCollection [
 	instVarNames := aCollection
 ]
 
+{ #category : #hooks }
+OLClass >> installMethods [
+	| methods remoteClass |
+	methods := (self methodBuilder methodsFromDefinition: self)
+		sorted: [ :a :b | a selector < b selector ].
+	methods do:
+			[ :method | self remote methodDictionary at: method selector put: method ]
+]
+
 { #category : #testing }
 OLClass >> test [
 	self assert: true

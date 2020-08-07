@@ -74,6 +74,16 @@ OLObjVLisp >> hookInstallClass: aClassDefinition [
 ]
 
 { #category : #hooks }
+OLObjVLisp >> hookInstallMethods [
+	self allClasses do: [ :class | class installMethods ]
+]
+
+{ #category : #hooks }
 OLObjVLisp >> hookNewSystemDictionary [
+	^ self newDummyInstruction 
+]
+
+{ #category : #hooks }
+OLObjVLisp >> hookRegisterClass: anEP2RemoteClass fromDefinition: anOLClass [ 
 	^ self newDummyInstruction 
 ]
