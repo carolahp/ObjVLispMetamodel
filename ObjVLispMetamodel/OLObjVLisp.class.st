@@ -24,6 +24,11 @@ OLObjVLisp class >> instanceVariableSlotMetaclass [
 ]
 
 { #category : #hooks }
+OLObjVLisp >> hookCreateInitialObjects [
+	^ self newDummyInstruction 
+]
+
+{ #category : #hooks }
 OLObjVLisp >> hookCreateMetaclassStubWithClassLoader: aClassLoader [ 
 	| model loader metaclassIndex classIndex theNewMetaclass theNewMetaclassClass |
 	" We need to create the metaclass and its respective metaclass (the metaclass class) "
@@ -43,4 +48,27 @@ OLObjVLisp >> hookCreateMetaclassStubWithClassLoader: aClassLoader [
 
 	self assert: theNewMetaclass basicClass = theNewMetaclass.
 	^ theNewMetaclass
+]
+
+{ #category : #hooks }
+OLObjVLisp >> hookInitalizeGlobals [
+	^ self newDummyInstruction
+]
+
+{ #category : #hooks }
+OLObjVLisp >> hookInitializeClassStubs [
+	^ self newDummyInstruction 
+]
+
+{ #category : #hooks }
+OLObjVLisp >> hookInstallClass: aClassDefinition [
+	
+	aClassDefinition hookInstall.
+	aClassDefinition test.
+	^ aClassDefinition remote
+]
+
+{ #category : #hooks }
+OLObjVLisp >> hookNewSystemDictionary [
+	^ self newDummyInstruction 
 ]
