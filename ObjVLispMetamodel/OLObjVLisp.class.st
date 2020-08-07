@@ -23,6 +23,11 @@ OLObjVLisp class >> instanceVariableSlotMetaclass [
 	^ EP2MInstanceVariableSlot 
 ]
 
+{ #category : #'as yet unclassified' }
+OLObjVLisp class >> methodMetaclass [ 
+	^ EP2MMethod
+]
+
 { #category : #hooks }
 OLObjVLisp >> hookCreateInitialObjects [
 	^ self newDummyInstruction 
