@@ -30,7 +30,9 @@ OLObjVLisp class >> methodMetaclass [
 
 { #category : #hooks }
 OLObjVLisp >> classByRoleOrName: aString ifAbsent: aBlock [
+	"extending the original classByRoleOrName:ifAbsent: method to consider searching classes by system mapping"
 	|class|
+	
 	class := super classByRoleOrName: aString ifAbsent: [nil].
 	class ifNil: [ class := self classBySystemMapping: aString ifAbsent: [ nil ] ].
 	class ifNil: [^ aBlock value].
@@ -44,6 +46,7 @@ OLObjVLisp >> classBySystemMapping: aString [
 
 { #category : #hooks }
 OLObjVLisp >> classBySystemMapping: aString ifAbsent: aBlockClosure [ 
+	"Classes in metamodel map classes in the system according to systemClassMapping definition"
 	| className |
 	className := self systemClassMapping at: aString ifAbsent: nil.
 	className ifNil: [^ aBlockClosure value].
