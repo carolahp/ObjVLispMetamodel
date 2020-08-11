@@ -19,9 +19,8 @@ OLClass >> classSide [
 
 { #category : #hooks }
 OLClass >> hookInstall [
-	| remote remoteFormat remoteMethodDict remoteSuperclass |
-	remote := self remote.
-	self format.
+	| remoteMethodDict remoteSuperclass |
+	
 	"we install an empty methodDict, it will be filled lated"
 	remoteMethodDict := EP2RemoteDictionary newWithBackend: self parent remote espellBackend.
 	remoteSuperclass := self superclass ifNil: [nil] ifNotNil:[self parent remote classNamed: self superclass name].
