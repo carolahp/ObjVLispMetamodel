@@ -142,5 +142,8 @@ OLObjVLisp >> hookNewSystemDictionary [
 
 { #category : #hooks }
 OLObjVLisp >> hookRegisterClass: anEP2RemoteClass fromDefinition: anOLClass [ 
-	^ self newDummyInstruction 
+	self classLoader
+		registerClass: anEP2RemoteClass asRemoteClass
+		definition: anOLClass
+		fullyLoaded: true.
 ]

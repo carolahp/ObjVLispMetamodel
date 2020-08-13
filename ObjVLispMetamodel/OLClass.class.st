@@ -33,6 +33,12 @@ OLClass >> hookInstall [
 	
 ]
 
+{ #category : #bindings }
+OLClass >> innerBindingOf: aSymbol [ 
+	"in ObjVLisp there are no class variables"
+	^nil
+]
+
 { #category : #accessing }
 OLClass >> instVarNames: aCollection [ 
 	instVarNames := aCollection
@@ -40,7 +46,7 @@ OLClass >> instVarNames: aCollection [
 
 { #category : #hooks }
 OLClass >> installMethods [
-	| methods remoteClass |
+	| methods |
 	methods := (self methodBuilder methodsFromDefinition: self)
 		sorted: [ :a :b | a selector < b selector ].
 	methods do:
@@ -49,5 +55,5 @@ OLClass >> installMethods [
 
 { #category : #testing }
 OLClass >> test [
-	self assert: true
+	super test
 ]
