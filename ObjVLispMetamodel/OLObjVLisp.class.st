@@ -124,13 +124,7 @@ OLObjVLisp >> hookInstallMethods [
 { #category : #hooks }
 OLObjVLisp >> hookMainProcess [
 	| code |
-	self halt.
-	code := '| f |
-	f := File new.
-	f openReadWrite: f localFolderPath , ''holaObjVLisp.txt''.
-	f position: f size.
-	f nextPutAll: ''asd''.
-	f close'.
+	code := 'Class start'.
 	^ self newInstruction 
 		code: code
 ]
