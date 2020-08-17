@@ -112,7 +112,7 @@ OLObjVLisp >> hookInitializeClassStubs [
 OLObjVLisp >> hookInstallClass: aClassDefinition [
 	
 	aClassDefinition hookInstall.
-	aClassDefinition test.
+	aClassDefinition testRemote.
 	^ aClassDefinition remote
 ]
 

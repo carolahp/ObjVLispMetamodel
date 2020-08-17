@@ -22,7 +22,7 @@ OLClass >> hookInstall [
 	| remoteMethodDict remoteSuperclass |
 	
 	"we install an empty methodDict, it will be filled lated"
-	remoteMethodDict := EP2RemoteDictionary newWithBackend: self parent remote espellBackend.
+	remoteMethodDict := EP2RemoteMethodDictionary newWithBackend: self parent remote espellBackend.
 	remoteSuperclass := self superclass ifNil: [nil] ifNotNil:[self parent remote classNamed: self superclass name].
 	self remote 
 		methodDictionary: remoteMethodDict;
