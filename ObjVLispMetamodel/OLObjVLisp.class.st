@@ -6,7 +6,7 @@ I require the PharoBootstrapGeneric and its dependencies.
 "
 Class {
 	#name : #OLObjVLisp,
-	#superclass : #EP2MLanguageExplicitMetaclasses,
+	#superclass : #EP2MLanguage,
 	#category : #ObjVLispMetamodel
 }
 
