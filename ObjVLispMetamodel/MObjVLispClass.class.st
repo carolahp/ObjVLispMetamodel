@@ -1,10 +1,8 @@
 "
 I am the metamodel of a class in ObjVLisp.
-I am used to bootstrap ObjVLisp using the PharoBootstrapGeneric.
-I require PharoBootstrapGeneric and its dependencies (including Espell2).
 "
 Class {
-	#name : #OLClass,
+	#name : #MObjVLispClass,
 	#superclass : #EP2MClass,
 	#instVars : [
 		'instVarNames'
@@ -13,12 +11,12 @@ Class {
 }
 
 { #category : #'accessing-backend' }
-OLClass >> classSide [
-	^ self parent classMetaclass
+MObjVLispClass >> classSide [
+	^ self metaclass
 ]
 
 { #category : #hooks }
-OLClass >> hookInstall [
+MObjVLispClass >> hookInstall [
 	| remoteMethodDict remoteSuperclass |
 	
 	"we install an empty methodDict, it will be filled lated"
@@ -28,24 +26,24 @@ OLClass >> hookInstall [
 		methodDictionary: remoteMethodDict;
 		superclass: remoteSuperclass;
 		format: self format.
-	
-	self remote instanceVariableNamed: #instVarNames put: self instVarNames
-	
+	self remote instanceVariableNamed: #instVarNames put: self instVarNames asArray.
+	self remote instanceVariableNamed: #name put: self name asSymbol
 ]
 
 { #category : #bindings }
-OLClass >> innerBindingOf: aSymbol [ 
+MObjVLispClass >> innerBindingOf: aSymbol [ 
 	"in ObjVLisp there are no class variables"
 	^nil
 ]
 
 { #category : #accessing }
-OLClass >> instVarNames: aCollection [ 
+MObjVLispClass >> instVarNames: aCollection [ 
+self halt.
 	instVarNames := aCollection
 ]
 
 { #category : #hooks }
-OLClass >> installMethods [
+MObjVLispClass >> installMethods [
 	| methods |
 	methods := (self methodBuilder methodsFromDefinition: self)
 		sorted: [ :a :b | a selector < b selector ].
@@ -53,7 +51,12 @@ OLClass >> installMethods [
 			[ :method | self remote methodDictionary at: method selector put: method ]
 ]
 
+{ #category : #'accessing-backend' }
+MObjVLispClass >> metaclass [
+	^ self parent classMetaclass
+]
+
 { #category : #testing }
-OLClass >> test [
+MObjVLispClass >> test [
 	super test
 ]
