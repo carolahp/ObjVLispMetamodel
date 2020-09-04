@@ -18,3 +18,10 @@ PPBinding >> bindingOf: aString [
 	"Therefore it is a temp or an instance variable"
 	^ nil
 ]
+
+{ #category : #binding }
+PPBinding >> innerBindingOf: aString [ 
+	"no class variables nor shared pools"
+	"If it is a temp or an instance variable"
+	^ nil
+]
