@@ -6,7 +6,7 @@ Class {
 
 { #category : #binding }
 PPBinding >> binding [ 
-	^ EP2MetaclassBinding  new
+	^ EP2GlobalBinding  new
 			name: class name; 
 			objectSpace: environment objectSpace;
 			yourself 
