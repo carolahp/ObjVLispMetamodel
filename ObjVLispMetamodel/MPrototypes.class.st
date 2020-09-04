@@ -53,7 +53,7 @@ MPrototypes >> loadCustomClasses [
 	methodInstVarsDict := (self class methodMetaclass named: #instVarsDict parent: classPrototype)
 		sourceCode: 
 'instVarsDict
-	^ instVarsDict ifNil: [instVarsDict := Dictionary basicNew init:4; yourself]';
+	^ instVarsDict ifNil: [instVarsDict := IdentityDictionary basicNew init:4; yourself]';
 		selector: #instVarsDict;
 		yourself.
 	methodLog := (self class methodMetaclass named: #log: parent: classPrototype)
@@ -86,7 +86,7 @@ MPrototypes >> loadCustomClasses [
 	package addDefinedBehavior: classPrototype.
 	self addBehavior: classPrototype.
 	
-	classStudent := self class classPrototypeMetaclass named: #Student parent: self.
+	"classStudent := self class classPrototypeMetaclass named: #Student parent: self.
 	classStudent layout: (EP2FixedLayout on: classStudent);
 		superclass: classPrototype;
 		package: package;
@@ -110,5 +110,5 @@ MPrototypes >> loadCustomClasses [
 		addSlot: #methodDict;
 		addSlot: #format.
 	package addDefinedBehavior: classCaro.
-	self addBehavior: classCaro
+	self addBehavior: classCaro"
 ]
