@@ -33,8 +33,7 @@ PPPrototype >> installMethods [
 	
 	getterCode := 'grades ^grades'.
 	setterCode := 'grades:value grades:=value'.
-	self halt.
-	binding := self debugCode: 'proto instVarsDict' temps: {#proto -> self remote}.
+	binding := (self evaluateLoadingMissingDefinitionsFromPharo: 'proto instVarsDict at:#grades put:nil; yourself' temps: {#proto -> self remote}) asRemoteDictionary.
 	self installPrototypeAccessor: getterCode selector: #grades binding: binding.
 	self installPrototypeAccessor: setterCode selector: #grades: binding: binding
 	
