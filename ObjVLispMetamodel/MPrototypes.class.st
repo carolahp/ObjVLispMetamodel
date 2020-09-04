@@ -39,7 +39,7 @@ MPrototypes >> hookEntryPoint [
 
 { #category : #hooks }
 MPrototypes >> loadCustomClasses [
-	| package classPrototype classStudent classCaro methodAvg methodStart methodLog |
+	| package classPrototype classStudent classCaro methodAvg methodStart methodLog methodInstVarsDict |
 	" we have only one package to the moment "
 	package := self packages anyOne.
 	classPrototype := self class classPrototypeMetaclass named: #Prototype parent: self.
@@ -48,7 +48,14 @@ MPrototypes >> loadCustomClasses [
 		package: package;
 		addSlot: #superclass;
 		addSlot: #methodDict;
-		addSlot: #format.
+		addSlot: #format;
+		addSlot: #instVarsDict.
+	methodInstVarsDict := (self class methodMetaclass named: #instVarsDict parent: classPrototype)
+		sourceCode: 
+'instVarsDict
+	^ instVarsDict ifNil: [instVarsDict := Dictionary basicNew init:4; yourself]';
+		selector: #instVarsDict;
+		yourself.
 	methodLog := (self class methodMetaclass named: #log: parent: classPrototype)
 		sourceCode: 
 'log: aString
@@ -65,12 +72,17 @@ MPrototypes >> loadCustomClasses [
 		sourceCode: 
 'start
 	self log: '' Welcome to Prototypes ''.
-	Prototype 
-	Class quit';
+	self log: Prototype grades asString. 
+	Prototype grades: 4.
+	self log: '' Prototype grades ->'' , Prototype grades asString. 
+	"Caro grades: 5.
+	self log: '' Caro grades ->'' , Caro grades asString.
+	Class quit"';
 		selector: #start;
 		yourself.
 	classPrototype addLocalMethod: methodLog.
 	classPrototype addLocalMethod: methodStart.
+	classPrototype addLocalMethod: methodInstVarsDict.
 	package addDefinedBehavior: classPrototype.
 	self addBehavior: classPrototype.
 	
