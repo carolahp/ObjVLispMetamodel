@@ -39,23 +39,38 @@ MPrototypes >> hookEntryPoint [
 
 { #category : #hooks }
 MPrototypes >> loadCustomClasses [
-	| package classPrototype classProtoPrototype classStudent classCaro methodAvg |
+	| package classPrototype classStudent classCaro methodAvg methodStart methodLog |
 	" we have only one package to the moment "
 	package := self packages anyOne.
-	classProtoPrototype := self class classPrototypeMetaclass named: #ProtoPrototype parent: self.
-	classProtoPrototype	layout: (EP2FixedLayout on: classProtoPrototype);
+	classPrototype := self class classPrototypeMetaclass named: #Prototype parent: self.
+	classPrototype	layout: (EP2FixedLayout on: classPrototype);
 		superclass: (self classNamed: #Object);
 		package: package;
 		addSlot: #superclass;
 		addSlot: #methodDict;
 		addSlot: #format.
-	package addDefinedBehavior: classProtoPrototype.
-	self addBehavior: classProtoPrototype.
-	
-	"classPrototype := self class classPrototypeMetaclass named: #Prototype parent: self.
-	classPrototype	layout: (EP2FixedLayout on: classPrototype);
-		superclass: (self classNamed: #ProtoPrototype);
-		package: package.
+	methodLog := (self class methodMetaclass named: #log: parent: classPrototype)
+		sourceCode: 
+'log: aString
+	| f path |
+	f := File new. 
+	path := f localFolderPath, ''.txt''.
+	f openReadWrite: path.
+	f position: f size.
+	f nextPutAll: aString.
+	f close';
+		selector: #log:;
+		yourself.
+	methodStart := (self class methodMetaclass named: #start parent: classPrototype)
+		sourceCode: 
+'start
+	self log: '' Welcome to Prototypes ''.
+	Prototype 
+	Class quit';
+		selector: #start;
+		yourself.
+	classPrototype addLocalMethod: methodLog.
+	classPrototype addLocalMethod: methodStart.
 	package addDefinedBehavior: classPrototype.
 	self addBehavior: classPrototype.
 	
@@ -63,9 +78,12 @@ MPrototypes >> loadCustomClasses [
 	classStudent layout: (EP2FixedLayout on: classStudent);
 		superclass: classPrototype;
 		package: package;
-		addSlot: #grades.
+		addSlot: #superclass;
+		addSlot: #methodDict;
+		addSlot: #format;
+		addInstVar: #grades.
 	methodAvg := (self class methodMetaclass named: #avg parent: classStudent)
-		sourceCode: 'avg ^ grades avg';
+		sourceCode: 'avg ^ self grades avg';
 		selector: #avg;
 		yourself.
 	classStudent addLocalMethod: methodAvg.
@@ -75,8 +93,10 @@ MPrototypes >> loadCustomClasses [
 	classCaro := self class classPrototypeMetaclass named: #Caro parent: self.
 	classCaro layout: (EP2FixedLayout on: classCaro);
 		superclass: classStudent;
-		package: package.
+		package: package;
+		addSlot: #superclass;
+		addSlot: #methodDict;
+		addSlot: #format.
 	package addDefinedBehavior: classCaro.
-	self addBehavior: classCaro.
-	"
+	self addBehavior: classCaro
 ]
