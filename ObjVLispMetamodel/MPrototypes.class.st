@@ -61,7 +61,7 @@ MPrototypes >> loadCustomClasses [
 'log: aString
 	| f path |
 	f := File new. 
-	path := f localFolderPath, ''.txt''.
+	path := f localFolderPath, ''prototypes.txt''.
 	f openReadWrite: path.
 	f position: f size.
 	f nextPutAll: aString.
@@ -71,10 +71,14 @@ MPrototypes >> loadCustomClasses [
 	methodStart := (self class methodMetaclass named: #start parent: classPrototype)
 		sourceCode: 
 'start
+	| d |
 	self log: '' Welcome to Prototypes ''.
-	self log: Prototype grades asString. 
+	d := Dictionary new.
+	d at: #hola put: 1.
+	self log: '' Prototype grades before ->'' , Prototype grades asString. 
 	Prototype grades: 4.
-	self log: '' Prototype grades ->'' , Prototype grades asString. 
+	self log: '' Prototype grades after ->'' , Prototype grades asString. 
+	Class quit
 	"Caro grades: 5.
 	self log: '' Caro grades ->'' , Caro grades asString.
 	Class quit"';

@@ -19,8 +19,3 @@ MObjVLispClass >> innerBindingOf: aSymbol [
 	"in ObjVLisp there are no class variables"
 	^nil
 ]
-
-{ #category : #testing }
-MObjVLispClass >> test [
-	super test
-]
