@@ -32,8 +32,8 @@ PPPrototype >> installMethods [
 	super installMethods.
 	
 	getterCode := 'grades ^grades'.
-	setterCode := 'grades:value grades:=value'.
-	binding := (self evaluateLoadingMissingDefinitionsFromPharo: 'proto instVarsDict at:#grades put:nil; yourself' temps: {#proto -> self remote}) asRemoteDictionary.
+	setterCode := 'grades:aValue grades:=aValue'.
+	binding := {#grades -> nil} asDictionary "(self evaluateLoadingMissingDefinitionsFromPharo: 'proto instVarsDict at:#grades put:nil; yourself' temps: {#proto -> self remote}) asRemoteDictionary".
 	self installPrototypeAccessor: getterCode selector: #grades binding: binding.
 	self installPrototypeAccessor: setterCode selector: #grades: binding: binding
 	
@@ -64,7 +64,7 @@ PPPrototype >> installStub [
 		ifFalse: [ ^ self ].
 		
 	"I am instance of myself, therefore I install myself directly as a metaclass stub"
-	^ self installMetaclassStub
+	^ self installMetacircularStub
 ]
 
 { #category : #accessing }

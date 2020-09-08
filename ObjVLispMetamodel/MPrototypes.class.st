@@ -14,21 +14,6 @@ MPrototypes class >> classPrototypeMetaclass [
 	^ PPPrototype 
 ]
 
-{ #category : #'as yet unclassified' }
-MPrototypes class >> indexedSlotMetaclass [
-	^ EP2MIndexedSlot
-]
-
-{ #category : #'as yet unclassified' }
-MPrototypes class >> instanceVariableSlotMetaclass [
-	^ EP2MInstanceVariableSlot 
-]
-
-{ #category : #'as yet unclassified' }
-MPrototypes class >> methodMetaclass [ 
-	^ EP2MMethod
-]
-
 { #category : #hooks }
 MPrototypes >> hookEntryPoint [
 	| code |

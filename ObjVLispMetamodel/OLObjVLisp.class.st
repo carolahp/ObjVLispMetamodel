@@ -15,19 +15,9 @@ OLObjVLisp class >> classMetaclass [
 	^ MObjVLispClass
 ]
 
-{ #category : #'hooks-api' }
-OLObjVLisp class >> indexedSlotMetaclass [
-	^ EP2MIndexedSlot
-]
-
-{ #category : #'hooks-api' }
-OLObjVLisp class >> instanceVariableSlotMetaclass [
-	^ EP2MInstanceVariableSlot 
-]
-
-{ #category : #'as yet unclassified' }
-OLObjVLisp class >> methodMetaclass [ 
-	^ EP2MMethod
+{ #category : #accessing }
+OLObjVLisp >> builder [
+	^ builder
 ]
 
 { #category : #hooks }
