@@ -32,14 +32,13 @@ MObjVLispClass >> innerBindingOf: aSymbol [
 
 { #category : #hooks }
 MObjVLispClass >> installStubCustom [
+	self metaclass = self
+		ifTrue: [ ^ self installMetacircularStub ].
+	"first install the stub of my metaclass"
+	self metaclass installStub.
+	"instantiate my metaclass to create a stub of me"
+	^ self metaclass newStubWithFormat: self format
 	
-	| remoteMetaclassClass newClass |
-	remoteMetaclassClass := self metaclass remote.
-	remoteMetaclassClass isNilObject
-		ifTrue: [ "install class with role metaclass"
-			remoteMetaclassClass := self metaclass installMetacircularStub ].
-	newClass := self metaclass newStubWithFormat: self format.
-	^ newClass
 ]
 
 { #category : #accessing }
