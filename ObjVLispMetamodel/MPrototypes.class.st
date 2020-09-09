@@ -63,7 +63,7 @@ MPrototypes >> loadCustomClasses [
 	self log: '' Prototype grades before ->'' , Prototype grades asString. 
 	Prototype grades: 4.
 	self log: '' Prototype grades after ->'' , Prototype grades asString. 
-	Class quit
+	System quit
 	"Caro grades: 5.
 	self log: '' Caro grades ->'' , Caro grades asString.
 	Class quit"';
