@@ -15,11 +15,6 @@ OLObjVLisp class >> classMetaclass [
 	^ MObjVLispClass
 ]
 
-{ #category : #accessing }
-OLObjVLisp >> builder [
-	^ builder
-]
-
 { #category : #hooks }
 OLObjVLisp >> hookEntryPoint [
 	| code |
