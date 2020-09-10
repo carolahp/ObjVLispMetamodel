@@ -53,16 +53,16 @@ MPrototypes >> loadCustomClasses [
 	System log: '' Student grades before ->'' , Student grades asString. 
 	Student grades: #(4 2 3).
 	System log: '' Student grades after ->'' , Student grades asString. 
+	System log: '' Student grades after ->'' , Student avg asString.
 	
 	System log: '' Caro grades before ->'' , Caro grades asString. 
 	Caro grades: #(7 7 6).
 	System log: '' Caro grades after ->'' , Caro grades asString. 
-	
 	caroAvg := Caro avg.
 	studentAvg := Student avg.
 	 
-	System log: '' Caro grades average ->'' , caroAvg asString.
 	System log: '' Student grades average ->'' , studentAvg asString. 
+	System log: '' Caro grades average ->'' , caroAvg asString.
 	
 	System quit ';
 		selector: #start;
