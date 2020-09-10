@@ -27,17 +27,32 @@ PPPrototype >> innerBindingOf: aSymbol [
 
 { #category : #accessing }
 PPPrototype >> installMethods [
-	| getterCode setterCode binding |
+	| getterCode setterCode binding getter setter |
+
+	getterCode := 'grades ^self instVarsDict at: #grades ifAbsent: [nil]'.
+	setterCode := 'grades:aValue self instVarsDict at: #grades put: aValue'.
+	
+	getter := (self parent class methodMetaclass named: #grades parent: self)
+		sourceCode: getterCode;
+		selector: #grades;
+		yourself.
+	setter := (self parent class methodMetaclass named: #grades: parent: self)
+		sourceCode: setterCode;
+		selector: #grades:;
+		yourself.
+	
+	self addLocalMethod: getter.
+	self addLocalMethod: setter.
+	
 	
 	super installMethods.
 
-	getterCode := 'grades ^grades'.
-	setterCode := 'grades:aValue grades:=aValue'.
-	
-	binding := {#grades -> nil} asDictionary "(self evaluateLoadingMissingDefinitionsFromPharo: 'proto instVarsDict at:#grades put:nil; yourself' temps: {#proto -> self remote}) asRemoteDictionary".
-	self halt.
-	self installPrototypeAccessor: getterCode selector: #grades binding: binding.
-	self installPrototypeAccessor: setterCode selector: #grades: binding: binding
+
+	"binding := {} asDictionary .
+	"
+		
+	"self installPrototypeAccessor: getterCode selector: #grades binding: binding.
+	self installPrototypeAccessor: setterCode selector: #grades: binding: binding"
 ]
 
 { #category : #'installing methods' }
