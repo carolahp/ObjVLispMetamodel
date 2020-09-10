@@ -24,7 +24,7 @@ MPrototypes >> hookEntryPoint [
 
 { #category : #hooks }
 MPrototypes >> loadCustomClasses [
-	| package classPrototype classStudent classCaro methodAvg methodStart methodLog methodInstVarsDict |
+	| package classPrototype classStudent classCaro methodAvg methodStart methodInstVarsDict |
 	" we have only one package to the moment "
 	package := self packages anyOne.
 	classPrototype := self class classPrototypeMetaclass named: #Prototype parent: self.
@@ -38,38 +38,25 @@ MPrototypes >> loadCustomClasses [
 	methodInstVarsDict := (self class methodMetaclass named: #instVarsDict parent: classPrototype)
 		sourceCode: 
 'instVarsDict
-	^ instVarsDict ifNil: [instVarsDict := IdentityDictionary basicNew init:4; yourself]';
+	^ instVarsDict ifNil: [instVarsDict := IdentityDictionary new]';
 		selector: #instVarsDict;
-		yourself.
-	methodLog := (self class methodMetaclass named: #log: parent: classPrototype)
-		sourceCode: 
-'log: aString
-	| f path |
-	f := File new. 
-	path := f localFolderPath, ''prototypes.txt''.
-	f openReadWrite: path.
-	f position: f size.
-	f nextPutAll: aString.
-	f close';
-		selector: #log:;
 		yourself.
 	methodStart := (self class methodMetaclass named: #start parent: classPrototype)
 		sourceCode: 
 'start
 	| d |
-	self log: '' Welcome to Prototypes ''.
+	File log: '' Welcome to Prototypes ''.
 	d := Dictionary new.
 	d at: #hola put: 1.
-	self log: '' Prototype grades before ->'' , Prototype grades asString. 
+	"File log: '' Prototype grades before ->'' , Prototype grades asString. 
 	Prototype grades: 4.
-	self log: '' Prototype grades after ->'' , Prototype grades asString. 
+	File log: '' Prototype grades after ->'' , Prototype grades asString. "
 	System quit
 	"Caro grades: 5.
-	self log: '' Caro grades ->'' , Caro grades asString.
-	Class quit"';
+	File log: '' Caro grades ->'' , Caro grades asString.
+	System quit"';
 		selector: #start;
 		yourself.
-	classPrototype addLocalMethod: methodLog.
 	classPrototype addLocalMethod: methodStart.
 	classPrototype addLocalMethod: methodInstVarsDict.
 	package addDefinedBehavior: classPrototype.

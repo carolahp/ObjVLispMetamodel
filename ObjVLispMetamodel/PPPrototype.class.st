@@ -30,13 +30,14 @@ PPPrototype >> installMethods [
 	| getterCode setterCode binding |
 	
 	super installMethods.
-	
+
 	getterCode := 'grades ^grades'.
 	setterCode := 'grades:aValue grades:=aValue'.
+	
 	binding := {#grades -> nil} asDictionary "(self evaluateLoadingMissingDefinitionsFromPharo: 'proto instVarsDict at:#grades put:nil; yourself' temps: {#proto -> self remote}) asRemoteDictionary".
+	self halt.
 	self installPrototypeAccessor: getterCode selector: #grades binding: binding.
 	self installPrototypeAccessor: setterCode selector: #grades: binding: binding
-	
 ]
 
 { #category : #'installing methods' }
