@@ -2,6 +2,7 @@ Class {
 	#name : #PPPrototype,
 	#superclass : #EP2MClass,
 	#instVars : [
+		'name',
 		'instVarsNames'
 	],
 	#category : #ObjVLispMetamodel
@@ -76,8 +77,8 @@ PPPrototype >> installPrototypeAccessor: code selector: selector binding: bindin
 
 { #category : #accessing }
 PPPrototype >> installStub [
-	self remote isNilObject
-		ifFalse: [ ^ self ].
+	self remoteIsInstalled
+		ifTrue: [ ^ self ].
 		
 	"I am instance of myself, therefore I install myself directly as a metaclass stub"
 	^ self installMetacircularStub
