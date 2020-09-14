@@ -1,5 +1,5 @@
 Class {
 	#name : #PPClass,
-	#superclass : #MExplicitMetaclassesClass,
+	#superclass : #MCandleExplicitMetaclassesClass,
 	#category : #ObjVLispMetamodel
 }

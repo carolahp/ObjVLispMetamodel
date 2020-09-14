@@ -3,21 +3,32 @@ Class {
 	#superclass : #MExplicitMetaclassesClass,
 	#instVars : [
 		'name',
-		'instVarsNames'
+		'instVarNames',
+		'instVarsDict'
 	],
 	#category : #ObjVLispMetamodel
 }
 
 { #category : #bindings }
 PPPrototype >> addInstVar: aString [
-	(instVarsNames indexOf: aString) = 0 ifFalse: [ self error: 'Attempt to add two instance variables with the same name'. ^ false ].
-	instVarsNames add: aString
+	(instVarNames indexOf: aString) = 0 ifFalse: [ self error: 'Attempt to add two instance variables with the same name'. ^ false ].
+	instVarNames add: aString
+]
+
+{ #category : #accessing }
+PPPrototype >> hookInstall [
+	super hookInstall.
+	
+	self remote 
+		name: (self toRemoteObject: self name asSymbol);
+		instVarNames: (self toRemoteObject: self instVarNames asArray).
+	^ self remote
 ]
 
 { #category : #accessing }
 PPPrototype >> initialize [
 	super initialize.
-	instVarsNames := #() asOrderedCollection.
+	instVarNames := #() asOrderedCollection.
 	
 ]
 
@@ -76,10 +87,7 @@ PPPrototype >> installPrototypeAccessor: code selector: selector binding: bindin
 ]
 
 { #category : #accessing }
-PPPrototype >> installStub [
-	self remoteIsInstalled
-		ifTrue: [ ^ self ].
-		
+PPPrototype >> installStubCustom [
 	"I am instance of myself, therefore I install myself directly as a metaclass stub"
 	^ self installMetacircularStub
 ]
