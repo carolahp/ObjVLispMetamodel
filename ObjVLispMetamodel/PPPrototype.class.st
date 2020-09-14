@@ -1,6 +1,6 @@
 Class {
 	#name : #PPPrototype,
-	#superclass : #EP2MClass,
+	#superclass : #MExplicitMetaclassesClass,
 	#instVars : [
 		'name',
 		'instVarsNames'
