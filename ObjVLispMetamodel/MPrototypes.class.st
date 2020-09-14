@@ -15,6 +15,15 @@ MPrototypes class >> classPrototypeMetaclass [
 ]
 
 { #category : #hooks }
+MPrototypes >> defaultGlobalVariables [
+	^ super defaultGlobalVariables
+		add:
+			((EP2MGlobalVariable named: #SmalltalkInstance parent: self)
+				role: #Smalltalk);
+		yourself
+]
+
+{ #category : #hooks }
 MPrototypes >> hookEntryPoint [
 	| code |
 	code := 'Prototype start'.
@@ -24,10 +33,8 @@ MPrototypes >> hookEntryPoint [
 
 { #category : #hooks }
 MPrototypes >> hookInitalizeGlobals [
-	| smalltalk systemDictionary |
+	| systemDictionary |
 	systemDictionary := ((self classNamed: #SystemDictionary) remote new) asRemoteSystemDictionary.
-	smalltalk := (self classNamed: #System) remote new instanceVariableAtIndex: 1 put: systemDictionary.
-	systemDictionary at: #Smalltalk put: smalltalk.
 	^ systemDictionary
 ]
 
@@ -35,13 +42,6 @@ MPrototypes >> hookInitalizeGlobals [
 MPrototypes >> hookNewSystemDictionary [
 	self deprecated: 'return the system dictionary fom the hookInitializeGlobals'.
 	^ self evaluateCode: 'Smalltalk globals'
-]
-
-{ #category : #hooks }
-MPrototypes >> initialize [ 
-	super initialize.
-	globalVariables add: (EP2MGlobalVariable named: #Smallatalk parent: self)
-	
 ]
 
 { #category : #hooks }
