@@ -54,6 +54,14 @@ MPrototypes >> hookInitializeProcessScheduler [
 ]
 
 { #category : #hooks }
+MPrototypes >> hookInitializeSpecialObjectsArray [
+	
+	self bootstrapInterpreter
+		evaluateCode: 'Smalltalk specialObjectsArray: newArray.'
+		withTemps: { 'newArray' -> self backend specialObjectsArray }.
+]
+
+{ #category : #hooks }
 MPrototypes >> hookNewSystemDictionary [
 	self deprecated: 'return the system dictionary fom the hookInitializeGlobals'.
 	^ self evaluateCode: 'Smalltalk globals'
@@ -101,7 +109,7 @@ MPrototypes >> loadCustomClasses [
 'start
 	| caroAvg studentAvg |
 	System log: '' Welcome to Prototypes '', File new imageName asString.
-	System log: (Smalltalk at: #MiGlobal) asString.
+	System log: thisContext asString.
 	Caro grades: #(7 7 6).
 	System log: '' Caro grades after ->'' , Caro grades asString.
 	System log: '' Size of an array ->'' , #(1 2 3 4) size asString.
