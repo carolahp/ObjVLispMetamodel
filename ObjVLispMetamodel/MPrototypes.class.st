@@ -24,6 +24,22 @@ MPrototypes >> defaultGlobalVariables [
 ]
 
 { #category : #hooks }
+MPrototypes >> hookCreateSmalltalkInstance [
+	| smalltalkImageDef smalltalk remoteSystemDictionary |
+	smalltalkImageDef := self
+		classWithRole: #SmalltalkImage.
+	remoteSystemDictionary := self remote objectSpace systemDictionary systemDictionary.
+	smalltalkImageDef
+		ifNotNil: [ 
+			smalltalk := smalltalkImageDef remote basicNew.
+			smalltalk instanceVariableAtIndex: 1 put: remoteSystemDictionary.
+			remoteSystemDictionary
+				at: (self globalWithRole: #Smalltalk) name
+				put: smalltalk. ].
+	^ smalltalk
+]
+
+{ #category : #hooks }
 MPrototypes >> hookEntryPoint [
 	| code |
 	code := 'Prototype start'.
@@ -40,15 +56,16 @@ MPrototypes >> hookInitalizeGlobals [
 { #category : #hooks }
 MPrototypes >> hookInitializeProcessScheduler [ 
 	
-	|code|
-	super hookInitializeProcessScheduler .
+	|code processor|
+	processor := super hookInitializeProcessScheduler .
 	code := 
-		'Smalltalk globals at: #Processor put: Processor.
+		'Smalltalk globals at: #Processor put: processor.
 		Smalltalk at: #Processor.
-		Smalltalk globals at: #MiGlobal put: 123456'.
+		Smalltalk globals at: #MiGlobal put: 123456.
+		processor'.
 	^ (self newInstruction
 		code: code;
-		temps: #();
+		temps: {#processor -> processor};
 		yourself ) evaluate
 
 ]
@@ -56,9 +73,9 @@ MPrototypes >> hookInitializeProcessScheduler [
 { #category : #hooks }
 MPrototypes >> hookInitializeSpecialObjectsArray [
 	
-	self bootstrapInterpreter
+	self remote bootstrapInterpreter
 		evaluateCode: 'Smalltalk specialObjectsArray: newArray.'
-		withTemps: { 'newArray' -> self backend specialObjectsArray }.
+		withTemps: { 'newArray' -> self remote espellBackend specialObjectsArray }.
 ]
 
 { #category : #hooks }
@@ -109,7 +126,7 @@ MPrototypes >> loadCustomClasses [
 'start
 	| caroAvg studentAvg |
 	System log: '' Welcome to Prototypes '', File new imageName asString.
-	System log: thisContext asString.
+	System log: thisContext stringCallStack.
 	Caro grades: #(7 7 6).
 	System log: '' Caro grades after ->'' , Caro grades asString.
 	System log: '' Size of an array ->'' , #(1 2 3 4) size asString.
@@ -120,7 +137,7 @@ MPrototypes >> loadCustomClasses [
 	System log: '' Caro grades average ->'' , caroAvg asString.
 	
 	
-	"System log: '' Prototype grades before ->'' , Prototype grades asString. 
+	System log: '' Prototype grades before ->'' , Prototype grades asString. 
 	Prototype grades: #(1 1 1).
 	System log: '' Prototype grades after ->'' , Prototype grades asString. 
 	
@@ -129,10 +146,10 @@ MPrototypes >> loadCustomClasses [
 	System log: '' Student grades after ->'' , Student grades asString. 
 	System log: '' Student grades after ->'' , Student avg asString.
 	
-	System log: '' Caro grades before ->'' , Caro grades asString. 
+	System log: '' Caro grades after ->'' , Caro grades asString. 
 	studentAvg := Student avg.
 	 
-	System log: '' Student grades average ->'' , studentAvg asString. "
+	System log: '' Student grades average ->'' , studentAvg asString. 
 	
 	System snapshotAndQuit ';
 		selector: #start;
@@ -148,7 +165,7 @@ MPrototypes >> loadCustomClasses [
 		superclass: classPrototype;
 		package: package.
 	methodAvg := (self class methodMetaclass named: #avg parent: classStudent)
-		sourceCode: 'avg ^ self grades average';
+		sourceCode: 'avg ^ grades average';
 		selector: #avg;
 		yourself.
 	classStudent addLocalMethod: methodAvg.

@@ -39,10 +39,11 @@ PPPrototype >> innerBindingOf: aSymbol [
 
 { #category : #accessing }
 PPPrototype >> installMethods [
-	| getterCode setterCode binding getter setter |
+	| getterCode setterCode getter setter testCode test |
 
 	getterCode := 'grades ^self instVarsDict at: #grades ifAbsent: [nil]'.
 	setterCode := 'grades:aValue self instVarsDict at: #grades put: aValue'.
+	testCode := 'grades1 ^grades'.
 	
 	getter := (self parent class methodMetaclass named: #grades parent: self)
 		sourceCode: getterCode;
@@ -52,10 +53,13 @@ PPPrototype >> installMethods [
 		sourceCode: setterCode;
 		selector: #grades:;
 		yourself.
-	
+	test := (self parent class methodMetaclass named: #grades1 parent: self)
+		sourceCode: testCode;
+		selector: #grades1;
+		yourself.
 	self addLocalMethod: getter.
 	self addLocalMethod: setter.
-	
+	self addLocalMethod: test.
 	
 	super installMethods.
 
@@ -100,4 +104,9 @@ PPPrototype >> isClass [
 { #category : #accessing }
 PPPrototype >> metaclass [
 	^ self 
+]
+
+{ #category : #hooks }
+PPPrototype >> parserClass [ 
+	^ PrototypesParser
 ]
