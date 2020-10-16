@@ -16,9 +16,21 @@ OLObjVLisp class >> classMetaclass [
 ]
 
 { #category : #hooks }
-OLObjVLisp >> hookEntryPoint [
-	| code |
-	code := 'Class start'.
-	^ self newInstruction 
-		code: code
+OLObjVLisp >> entryPointCode [
+	^ '
+	| p |
+	p := Point new.
+	System log: ''before garbage collection''.
+	System garbageCollect.
+	System log: ''after garbage collection''.
+	p setPinnedInMemory: true. 
+	System log: ''after pinning object collection''.
+	System garbageCollect.
+	System log: ''after pinning and garbage collection''.
+	System snapshotAndQuit'
+]
+
+{ #category : #hooks }
+OLObjVLisp >> hookInitializeSpecialObjectsArray [
+	^ nil
 ]

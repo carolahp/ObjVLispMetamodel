@@ -1,8 +1,5 @@
-"
-I am the metamodel of a class in ObjVLisp.
-"
 Class {
-	#name : #MObjVLispClass,
+	#name : #OwnershipClass,
 	#superclass : #MCandleExplicitMetaclassesClass,
 	#category : #ObjVLispMetamodel
 }

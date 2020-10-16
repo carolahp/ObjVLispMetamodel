@@ -24,6 +24,11 @@ MPrototypes >> defaultGlobalVariables [
 ]
 
 { #category : #hooks }
+MPrototypes >> entryPointCode [
+	^ 'Prototype start'
+]
+
+{ #category : #hooks }
 MPrototypes >> hookCreateSmalltalkInstance [
 	| smalltalkImageDef smalltalk remoteSystemDictionary |
 	smalltalkImageDef := self
@@ -37,14 +42,6 @@ MPrototypes >> hookCreateSmalltalkInstance [
 				at: (self globalWithRole: #Smalltalk) name
 				put: smalltalk. ].
 	^ smalltalk
-]
-
-{ #category : #hooks }
-MPrototypes >> hookEntryPoint [
-	| code |
-	code := 'Prototype start'.
-	^ self newInstruction 
-		code: code
 ]
 
 { #category : #hooks }
@@ -97,6 +94,7 @@ MPrototypes >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 { #category : #hooks }
 MPrototypes >> loadCustomClasses [
 	| package classPrototype classStudent classCaro methodAvg methodStart methodInstVarsDict methodName |
+	super loadCustomClasses .
 	" we have only one package to the moment "
 	package := self ensurePackageNamed: 'Kernel-Prototypes'.
 	classPrototype := self class classPrototypeMetaclass named: #Prototype parent: self.

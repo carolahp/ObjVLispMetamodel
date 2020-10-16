@@ -10,11 +10,8 @@ KernelQuit class >> classMetaclass [
 ]
 
 { #category : #hooks }
-KernelQuit >> hookEntryPoint [ 
-	| code |
-	code := 'Class start'.
-	^ self newInstruction 
-		code: code
+KernelQuit >> entryPointCode [ 
+	^ 'Class start'
 ]
 
 { #category : #hooks }
