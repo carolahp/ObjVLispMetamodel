@@ -1,6 +1,6 @@
 Class {
-	#name : #PPPrototype,
-	#superclass : #MExplicitMetaclassesClass,
+	#name : #PrototypesPrototype,
+	#superclass : #ExplicitMetaclassesClass,
 	#instVars : [
 		'name',
 		'instVarNames',
@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : #bindings }
-PPPrototype >> addInstVar: aString [
+PrototypesPrototype >> addInstVar: aString [
 	(instVarNames indexOf: aString) = 0 ifFalse: [ self error: 'Attempt to add two instance variables with the same name'. ^ false ].
 	instVarNames add: aString
 ]
 
 { #category : #accessing }
-PPPrototype >> hookInstall [
+PrototypesPrototype >> hookInstall [
 	super hookInstall.
 	
 	self remote 
@@ -26,40 +26,28 @@ PPPrototype >> hookInstall [
 ]
 
 { #category : #accessing }
-PPPrototype >> initialize [
+PrototypesPrototype >> initialize [
 	super initialize.
 	instVarNames := #() asOrderedCollection.
 	
 ]
 
 { #category : #bindings }
-PPPrototype >> innerBindingOf: aSymbol [ 
+PrototypesPrototype >> innerBindingOf: aSymbol [ 
 	^ nil
 ]
 
 { #category : #accessing }
-PPPrototype >> installMethods [
+PrototypesPrototype >> installMethods [
 	| getterCode setterCode getter setter testCode test |
 
 	getterCode := 'grades ^self instVarsDict at: #grades ifAbsent: [nil]'.
 	setterCode := 'grades:aValue self instVarsDict at: #grades put: aValue'.
 	testCode := 'grades1 ^grades'.
-	
-	getter := (self parent class methodMetaclass named: #grades parent: self)
-		sourceCode: getterCode;
-		selector: #grades;
-		yourself.
-	setter := (self parent class methodMetaclass named: #grades: parent: self)
-		sourceCode: setterCode;
-		selector: #grades:;
-		yourself.
-	test := (self parent class methodMetaclass named: #grades1 parent: self)
-		sourceCode: testCode;
-		selector: #grades1;
-		yourself.
-	self addLocalMethod: getter.
-	self addLocalMethod: setter.
-	self addLocalMethod: test.
+		
+	self addLocalMethodFromSource: getterCode selector: #grades.
+	self addLocalMethodFromSource: setterCode selector: #'grades:'.
+	self addLocalMethodFromSource: testCode selector: #grades1.
 	
 	super installMethods.
 
@@ -72,7 +60,7 @@ PPPrototype >> installMethods [
 ]
 
 { #category : #'installing methods' }
-PPPrototype >> installPrototypeAccessor: code selector: selector binding: binding [
+PrototypesPrototype >> installPrototypeAccessor: code selector: selector binding: binding [
 	| classBinding localCompiledMethod remoteCompiledMethod |
 	
 	classBinding := PPBinding new class: self; environment: self remote backend builder; yourself.
@@ -91,22 +79,22 @@ PPPrototype >> installPrototypeAccessor: code selector: selector binding: bindin
 ]
 
 { #category : #accessing }
-PPPrototype >> installStubCustom [
+PrototypesPrototype >> installStubCustom [
 	"I am instance of myself, therefore I install myself directly as a metaclass stub"
 	^ self installMetacircularStub
 ]
 
 { #category : #accessing }
-PPPrototype >> isClass [
+PrototypesPrototype >> isClass [
 	^ true
 ]
 
 { #category : #accessing }
-PPPrototype >> metaclass [
+PrototypesPrototype >> metaclass [
 	^ self 
 ]
 
 { #category : #hooks }
-PPPrototype >> parserClass [ 
+PrototypesPrototype >> parserClass [ 
 	^ PrototypesParser
 ]

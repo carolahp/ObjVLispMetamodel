@@ -1,5 +1,5 @@
 Class {
-	#name : #OwnershipClass,
+	#name : #PrototypesClass,
 	#superclass : #CandleExplicitMetaclassesClass,
 	#category : #ObjVLispMetamodel
 }

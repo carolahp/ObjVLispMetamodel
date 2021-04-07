@@ -6,13 +6,13 @@ I require the PharoBootstrapGeneric and its dependencies.
 "
 Class {
 	#name : #OLObjVLisp,
-	#superclass : #EP2MLanguage,
+	#superclass : #LanguageModel,
 	#category : #ObjVLispMetamodel
 }
 
 { #category : #'as yet unclassified' }
 OLObjVLisp class >> classMetaclass [
-	^ MObjVLispClass
+	^ ObjVLispClass
 ]
 
 { #category : #hooks }

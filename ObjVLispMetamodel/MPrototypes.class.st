@@ -1,31 +1,33 @@
 Class {
 	#name : #MPrototypes,
-	#superclass : #EP2MLanguage,
+	#superclass : #LanguageModel,
 	#category : #ObjVLispMetamodel
 }
 
 { #category : #'as yet unclassified' }
 MPrototypes class >> classMetaclass [
-	^ PPClass 
+	^ PrototypesClass 
 ]
 
 { #category : #'as yet unclassified' }
 MPrototypes class >> classPrototypeMetaclass [
-	^ PPPrototype 
+	^ PrototypesPrototype 
 ]
 
 { #category : #hooks }
 MPrototypes >> defaultGlobalVariables [
 	^ super defaultGlobalVariables
 		add:
-			((EP2MGlobalVariable named: #Smalltalk parent: self)
+			((GlobalModel named: #Smalltalk parent: self)
 				role: #Smalltalk);
 		yourself
 ]
 
 { #category : #hooks }
 MPrototypes >> entryPointCode [
-	^ 'Prototype start'
+	^ 'System log: ''hola! desde prototypes''.
+	System log: ''hola de nuevo''. 
+	System quit'
 ]
 
 { #category : #hooks }
@@ -93,6 +95,52 @@ MPrototypes >> hookSetSpecialObjectsArray: anEP2RemoteArray [
 
 { #category : #hooks }
 MPrototypes >> loadCustomClasses [
+	| package classPrototype methodStart methodProperties methodName methodSetTo methodDoesNotUnderstand |
+	super loadCustomClasses.
+	" we have only one package to the moment "
+	package := self ensurePackageNamed: 'Kernel-Prototypes'.
+
+	"Prototype class"
+	classPrototype := self class classPrototypeMetaclass
+		named: #Prototype
+		parent: self.
+	package addDefinedBehavior: classPrototype.
+	self addBehavior: classPrototype.
+	
+	classPrototype
+		layout: (EP2FixedLayout on: classPrototype);
+		superclass: (self classNamed: #Object);
+		package: package;
+		addSlot: #superclass;
+		addSlot: #methodDict;
+		addSlot: #format;
+		addSlot: #name;
+		addSlot: #instVarNames;
+		addSlot: #properties.
+	
+	"Methods"
+	classPrototype
+		addLocalMethodFromSource: 'properties
+	^ properties ifNil: [properties := IdentityDictionary new]'
+		selector: #properties.
+	classPrototype
+		addLocalMethodFromSource: 'set: propertyName to: anObject
+	self properties at: propertyName put: anObject'
+		selector: #set:to:.
+	classPrototype
+		addLocalMethodFromSource: 'doesNotUnderstand: msg
+	^ self properties at: msg selector'
+		selector: #doesNotUnderstand.
+	classPrototype
+		addLocalMethodFromSource: 'name
+	^ name'
+		selector: #name.
+
+	
+]
+
+{ #category : #hooks }
+MPrototypes >> loadCustomClassesOld [
 	| package classPrototype classStudent classCaro methodAvg methodStart methodInstVarsDict methodName |
 	super loadCustomClasses .
 	" we have only one package to the moment "
@@ -131,7 +179,7 @@ MPrototypes >> loadCustomClasses [
 	System log: '' Caro instVarsDict  ->'' , Caro instVarsDict asString.
 	System log: '' Caro grades class ->'' , Caro grades class asString.
 	
-	caroAvg := Caro avg.
+	caroAvg := Caro grades average.
 	System log: '' Caro grades average ->'' , caroAvg asString.
 	
 	
@@ -163,7 +211,8 @@ MPrototypes >> loadCustomClasses [
 		superclass: classPrototype;
 		package: package.
 	methodAvg := (self class methodMetaclass named: #avg parent: classStudent)
-		sourceCode: 'avg ^ grades average';
+		sourceCode: 'avg 
+		^ self grades average';
 		selector: #avg;
 		yourself.
 	classStudent addLocalMethod: methodAvg.

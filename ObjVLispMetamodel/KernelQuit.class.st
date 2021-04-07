@@ -1,6 +1,6 @@
 Class {
 	#name : #KernelQuit,
-	#superclass : #EP2MLanguage,
+	#superclass : #LanguageModel,
 	#category : #ObjVLispMetamodel
 }
 
@@ -11,7 +11,7 @@ KernelQuit class >> classMetaclass [
 
 { #category : #hooks }
 KernelQuit >> entryPointCode [ 
-	^ 'Class start'
+	^ 'System quit'
 ]
 
 { #category : #hooks }

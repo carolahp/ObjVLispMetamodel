@@ -1,6 +1,6 @@
 Class {
 	#name : #Ownership,
-	#superclass : #EP2MLanguage,
+	#superclass : #LanguageModel,
 	#category : #ObjVLispMetamodel
 }
 
