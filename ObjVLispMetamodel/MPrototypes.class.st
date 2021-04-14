@@ -1,3 +1,16 @@
+"
+|language|
+	""instantiates the model""
+	language := (MPrototypes 
+		named: 'Prototypes' 
+		withEntryPoint: 'System log: ''hola!''. System quit.').
+	
+	""generates the kernel and executes it using an external VM""
+	language generateAndRun.
+	
+	""loads the generated kernel file into the host (current image) and executes it using the VM simulator""
+	language runImageLoadedFromFile.
+"
 Class {
 	#name : #MPrototypes,
 	#superclass : #LanguageModel,
@@ -21,13 +34,6 @@ MPrototypes >> defaultGlobalVariables [
 			((GlobalModel named: #Smalltalk parent: self)
 				role: #Smalltalk);
 		yourself
-]
-
-{ #category : #hooks }
-MPrototypes >> entryPointCode [
-	^ 'System log: ''hola! desde prototypes''.
-	System log: ''hola de nuevo''. 
-	System quit'
 ]
 
 { #category : #hooks }
@@ -123,20 +129,47 @@ MPrototypes >> loadCustomClasses [
 		addLocalMethodFromSource: 'properties
 	^ properties ifNil: [properties := IdentityDictionary new]'
 		selector: #properties.
+	
 	classPrototype
 		addLocalMethodFromSource: 'set: propertyName to: anObject
 	self properties at: propertyName put: anObject'
 		selector: #set:to:.
+	
+	classPrototype
+		addLocalMethodFromSource: 'get: propertyName
+	^ self properties at: propertyName'
+		selector: #get:.
+	
 	classPrototype
 		addLocalMethodFromSource: 'doesNotUnderstand: msg
 	^ self properties at: msg selector'
 		selector: #doesNotUnderstand.
+	
 	classPrototype
 		addLocalMethodFromSource: 'name
 	^ name'
 		selector: #name.
-
+		
 	
+	
+(self classNamed: #BlockClosure)
+addLocalMethodFromSource: 'on: exception do: handlerAction
+	<primitive: 199>  
+	^ self value' selector: #on:do:.
+	
+
+((self classNamed: #Object) methodDict at: #error:)
+sourceCode: 'error: aString
+	"The default behavior for error: is the same as halt:. The code is replicated in order to avoid having an extra message send on the stack. This additional message is the one a subclass should override in order to change the error handling behavior."
+	| handler |
+	System log: ''Error: '', aString asString.
+	System log: Character cr asString, ''CallStack:''.
+	System log: thisContext stringCallStack asString.
+	
+	(handler := (Smalltalk at: #Processor) activeProcess errorHandler)
+		ifNil: [ self handleExceptionName: aString context: thisContext ]
+		ifNotNil: [ handler value: aString value: self ]'
+.
 ]
 
 { #category : #hooks }
